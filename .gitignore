@@ -1,0 +1,12 @@
+# python
+*.tox/
+*.pytest_cache/
+*__pycache__/
+*.pyc
+*.egg-info/
+
+# sam
+*.aws-sam/
+
+# ide
+/.idea
