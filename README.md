@@ -68,10 +68,6 @@ When in your virtual environment:
 > pip install -r requirements.txt tox
 ```
 
-### Environment Configuration
-
-TODO: env vars
-
 
 ### Pycharm setup
 
@@ -100,7 +96,6 @@ Create this file and build the proper dependencies.
 ```bash
 > make build
 ```
-
 
 > **See [Serverless Application Model (SAM) HOWTO Guide](https://github.com/awslabs/serverless-application-model/blob/master/HOWTO.md) for more details in how to get started.**
 
@@ -145,15 +140,41 @@ Take a look at the [AWS lambda docs](https://docs.aws.amazon.com/cli/latest/refe
 Now would be a good time to take a look at the Makefile to see the individual commands run. The two env vars `AWS_USER`
 and `AWS_SALESFEED_S3BUCKET` deal with how the resources will be named in AWS.
 
-We can now  create a lambda function:
+Move into the function directory. We can now package the function and all its dependencies into a zip file:
 
 ```bash
-> make upload
-> make create-function
+> make zip
 ```
 
-and once the function has been created and all the correct configuration set up, new changes can be packaged and deployed using:
+The path of the zip file created is `.aws-sam/package/FUNCTION_NAME.zip`. If you want to look at the source code that
+gets included in the zip file, take a look inside `.aws-sam/build`.
+ 
+Now upload the zip file to S3:
 
 ```bash
-> make deploy
+> aws s3 cp .aws-sam/package/FUNCTION_NAME.zip s3://BUCKET_NAME
+```
+
+Lets create the aws lambda function. You'll need the arn of a valid [IAM role](https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles.html)
+for your new function. Take a look at the
+[`create-function`](https://docs.aws.amazon.com/cli/latest/reference/lambda/create-function.html) documentation if you
+want to configure the function further, such as adding environment variables or placing the lambda inside a vpc. 
+Alternatively to doing this in your cli, you can create the function inside the aws lambda console.
+
+```bash
+aws lambda create-function --function-name FUNCTION_NAME --role IAM_ROLE_ARN --handler app.lambda_handler --runtime python3.6 --code S3Bucket=S3_BUCKET_NAME,S3Key=FUNCTION_NAME.zip
+```
+
+The function has been created. You can [invoke](https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html)
+it from your cli:
+
+```bash
+aws lambda invoke --function-name FUNCTION_NAME --payload '{"key1":"value1", "key2":"value2"}' outfile.txt
+```
+
+If you make further changes to your source code, you can upload an updated zip from S3 using [update-function-code](https://docs.aws.amazon.com/cli/latest/reference/lambda/update-function-code.html)
+so you don't need to delete and recreate your function. Use:
+
+```bash
+> aws lambda update-function-code --s3-bucket S3_BUCKET_NAME --s3-key FUNCTION_NAME.zip
 ```

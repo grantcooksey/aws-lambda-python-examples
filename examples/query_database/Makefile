@@ -1,4 +1,4 @@
-SERVICE=Inputs
+SERVICE=QueryDatabase
 
 build:
 	sam build -m requirements.txt --use-container
