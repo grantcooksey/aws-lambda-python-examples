@@ -14,6 +14,7 @@ def lambda_handler(event, context):
         logger.info(f'Calling out to {S3_BUCKET} bucket to list objects')
         s3_client = boto3.client('s3')
 
+        # Get all the objects from the bucket. Max 1000
         objects_in_bucket = s3_client.list_objects(Bucket=S3_BUCKET)
 
         logger.info('Found {} objects in the bucket. Printing a sample...'.format(len(objects_in_bucket['Contents'])))

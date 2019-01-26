@@ -162,7 +162,7 @@ want to configure the function further, such as adding environment variables or 
 Alternatively to doing this in your cli, you can create the function inside the aws lambda console.
 
 ```bash
-aws lambda create-function --function-name FUNCTION_NAME --role IAM_ROLE_ARN --handler app.lambda_handler --runtime python3.6 --code S3Bucket=S3_BUCKET_NAME,S3Key=FUNCTION_NAME.zip
+aws lambda create-function --function-name FUNCTION_NAME --role IAM_ROLE_ARN --handler service.app.lambda_handler --runtime python3.6 --code S3Bucket=S3_BUCKET_NAME,S3Key=FUNCTION_NAME.zip
 ```
 
 The function has been created. You can [invoke](https://docs.aws.amazon.com/cli/latest/reference/lambda/invoke.html)
