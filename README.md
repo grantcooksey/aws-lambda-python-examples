@@ -1,15 +1,8 @@
 # AWS Lambda Python Examples
 
 This repo serves as a starting point for building reliable aws lambda functions in python. These examples are focused 
-on not only teaching the basics, but providing examples of common use cases, and discussing the developer workflow that
+on not only teaching the basics, but providing examples of common use cases, and discusses the developer workflow that
 I have learned to use.
-
-This repo focuses on:
-* development
-* unit testing
-* monitoring
-* deployment
-
 
 Each example will have the basic structure:
 
